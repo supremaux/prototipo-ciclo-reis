@@ -1,0 +1,12 @@
+{
+  "name": "prototipo-ciclo-reis",
+  "version": "1.0.0",
+  "description": "Prototipo para a loja online da Ciclo Reis",
+  "license": "MIT",
+  "author": "Daniel Carvalho - Suprema",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

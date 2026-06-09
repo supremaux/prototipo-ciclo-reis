@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciclo Reis - Protótipo de E-commerce</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#005CA9', // Azul inspirado na fachada/logo
+                            green: '#45A83E', // Verde inspirado na fachada/logo
+                            dark: '#111827',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Animações simples para o Toast e Modal */
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .toast-enter { animation: slideInRight 0.3s ease-out forwards; }
+        .toast-leave { animation: fadeOut 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="bike" class="text-brand-green w-8 h-8"></i>
+                    <span class="text-2xl font-bold italic tracking-tighter">
+                        <span class="text-brand-green">CiCLO</span><span class="text-brand-blue">REIS</span>
+                    </span>
+                </div>
+
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="O que você procura?" class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                        <button class="absolute right-3 top-2.5 text-gray-400 hover:text-brand-blue">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button class="text-gray-600 hover:text-brand-blue flex flex-col items-center gap-1 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                        <span class="text-xs font-medium">Entrar</span>
+                    </button>
+                    <button onclick="toggleCart()" class="text-gray-600 hover:text-brand-green flex flex-col items-center gap-1 transition-colors relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span class="text-xs font-medium">Carrinho</span>
+                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-brand-green text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full hidden">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-brand-dark overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&q=80" alt="Ciclista em alta performance" class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-start">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 max-w-2xl leading-tight">
+                A melhor experiência sobre duas rodas em Mato Grosso do Sul.
+            </h1>
+            <p class="text-lg text-gray-200 mb-8 max-w-xl">
+                Encontre bicicletas, peças e acessórios das melhores marcas com a garantia de quem entende do assunto desde 2005.
+            </p>
+            <button class="bg-brand-green hover:bg-brand-blue text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all transform hover:-translate-y-0.5">
+                Ver Ofertas
+            </button>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">Lançamentos em Destaque</h2>
+            <a href="#" class="text-brand-blue font-medium hover:underline flex items-center gap-1">
+                Ver todos <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-shadow">
+                <div class="relative h-48 overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80" alt="Mountain Bike" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="p-5">
+                    <span class="text-xs font-semibold text-brand-green uppercase tracking-wider">Mountain Bike</span>
+                    <h3 class="font-semibold text-gray-800 mt-1 mb-2 line-clamp-2">Bicicleta Oggi Big Wheel 7.3 2024</h3>
+                    <div class="flex flex-col mb-4">
+                        <span class="text-sm text-gray-400 line-through">R$ 5.990,00</span>
+                        <span class="text-xl font-bold text-brand-blue">R$ 5.390,00</span>
+                    </div>
+                    <button onclick="addToCart('Bicicleta Oggi Big Wheel 7.3')" class="w-full bg-brand-green hover:bg-[#388e32] text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Comprar
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-shadow">
+                <div class="relative h-48 overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&q=80" alt="Bicicleta Urbana" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="p-5">
+                    <span class="text-xs font-semibold text-brand-green uppercase tracking-wider">Urbana</span>
+                    <h3 class="font-semibold text-gray-800 mt-1 mb-2 line-clamp-2">Bicicleta Sense Move Urban 2024</h3>
+                    <div class="flex flex-col mb-4">
+                        <span class="text-sm text-gray-400 line-through">R$ 2.490,00</span>
+                        <span class="text-xl font-bold text-brand-blue">R$ 2.150,00</span>
+                    </div>
+                    <button onclick="addToCart('Bicicleta Sense Move Urban')" class="w-full bg-brand-green hover:bg-[#388e32] text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Comprar
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-shadow">
+                <div class="relative h-48 overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&q=80" alt="Speed" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="p-5">
+                    <span class="text-xs font-semibold text-brand-green uppercase tracking-wider">Speed / Road</span>
+                    <h3 class="font-semibold text-gray-800 mt-1 mb-2 line-clamp-2">Bicicleta Caloi Strada Racing</h3>
+                    <div class="flex flex-col mb-4">
+                        <span class="text-transparent selection:bg-transparent text-sm">&nbsp;</span>
+                        <span class="text-xl font-bold text-brand-blue">R$ 7.899,00</span>
+                    </div>
+                    <button onclick="addToCart('Bicicleta Caloi Strada Racing')" class="w-full bg-brand-green hover:bg-[#388e32] text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Comprar
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-shadow">
+                <div class="relative h-48 overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1576435728678-68ce180e3e40?auto=format&fit=crop&q=80" alt="Acessórios" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="p-5">
+                    <span class="text-xs font-semibold text-brand-green uppercase tracking-wider">Acessórios</span>
+                    <h3 class="font-semibold text-gray-800 mt-1 mb-2 line-clamp-2">Capacete Giro Fixture Mips Preto</h3>
+                    <div class="flex flex-col mb-4">
+                        <span class="text-sm text-gray-400 line-through">R$ 450,00</span>
+                        <span class="text-xl font-bold text-brand-blue">R$ 389,90</span>
+                    </div>
+                    <button onclick="addToCart('Capacete Giro Fixture')" class="w-full bg-brand-green hover:bg-[#388e32] text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Comprar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="toggleCart()"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="flex justify-between items-center border-b pb-4 mb-4">
+                            <h3 class="text-xl font-semibold leading-6 text-gray-900 flex items-center gap-2" id="modal-title">
+                                <i data-lucide="shopping-cart" class="text-brand-blue w-6 h-6"></i> Seu Carrinho
+                            </h3>
+                            <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-500">
+                                <i data-lucide="x" class="w-6 h-6"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-2 flex flex-col md:flex-row gap-6">
+                            <div class="flex-1 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <h4 class="font-medium text-sm text-gray-700 mb-3">Resumo do Pedido</h4>
+                                <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-200 rounded object-cover overflow-hidden">
+                                            <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80" alt="Bike" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="text-sm">
+                                            <p class="font-medium text-gray-800">Produto Exemplo</p>
+                                            <p class="text-gray-500">Qtd: 1</p>
+                                        </div>
+                                    </div>
+                                    <span class="font-semibold text-gray-800">R$ --,--</span>
+                                </div>
+                                <div class="flex justify-between mt-4 text-lg font-bold text-brand-blue">
+                                    <span>Total:</span>
+                                    <span>R$ --,--</span>
+                                </div>
+                            </div>
+
+                            <div class="flex-1">
+                                <h4 class="font-medium text-sm text-gray-700 mb-3">Dados de Pagamento</h4>
+                                <form id="checkout-form" onsubmit="event.preventDefault(); processCheckout();" class="space-y-3">
+                                    <div>
+                                        <input type="text" required placeholder="Nome Completo" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue">
+                                    </div>
+                                    <div>
+                                        <input type="email" required placeholder="E-mail" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue">
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" required placeholder="Número do Cartão" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue">
+                                        <i data-lucide="credit-card" class="absolute right-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <input type="text" required placeholder="Validade (MM/AA)" class="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue">
+                                        <input type="text" required placeholder="CVV" class="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue">
+                                    </div>
+                                    <button type="submit" class="w-full mt-4 bg-brand-blue hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition-colors flex justify-center items-center gap-2">
+                                        <i data-lucide="lock" class="w-4 h-4"></i> Finalizar Compra Segura
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"></div>
+
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+
+        let cartCount = 0;
+
+        // Função para mostrar notificações (Toasts)
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-brand-green' : 'bg-brand-blue';
+            const icon = type === 'success' ? 'check-circle' : 'shopping-bag';
+            
+            toast.className = `toast-enter flex items-center gap-3 ${bgColor} text-white px-4 py-3 rounded-lg shadow-lg max-w-sm`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-5 h-5"></i>
+                <p class="font-medium text-sm">${message}</p>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons(); // renderiza o ícone recém inserido
+
+            // Remove o toast após 3.5 segundos
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-leave');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300); // Tempo da animação de saída
+            }, 3500);
+        }
+
+        // Função para simular adição ao carrinho
+        function addToCart(productName) {
+            cartCount++;
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cartCount;
+            badge.classList.remove('hidden');
+            
+            showToast(`${productName} adicionado ao carrinho!`, 'success');
+        }
+
+        // Função para abrir/fechar o modal de checkout
+        function toggleCart() {
+            const modal = document.getElementById('checkout-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Função para simular a finalização da compra
+        function processCheckout() {
+            toggleCart(); // Fecha o modal
+            showToast('Compra processada com sucesso! Obrigado.', 'success');
+            
+            // Reseta o carrinho
+            cartCount = 0;
+            const badge = document.getElementById('cart-badge');
+            badge.classList.add('hidden');
+            document.getElementById('checkout-form').reset();
+        }
+    </script>
+</body>
+</html>
