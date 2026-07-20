@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ciclo Reis - Protótipo de E-commerce</title>
+    <title>Bike Queen - Protótipo de E-commerce</title>
     <meta name="robots" content="noindex, nofollow" />
 
     <link rel="stylesheet" href="./style.css" />
@@ -41,14 +41,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
           <div class="flex items-center gap-2 cursor-pointer">
-            <img
-              src="./img/logo.avif"
-              alt="Ciclo Reis"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-              class="w-24 h-auto object-contain"
-            />
+            <span class="flex items-center text-4xl font-bold italic"
+              ><div class="text-brand-blue">Bike</div>
+              <div class="text-brand-green">Queen</div></span
+            >
           </div>
 
           <div class="hidden md:flex flex-1 max-w-md mx-8">
@@ -95,6 +91,8 @@
         <img
           src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&q=80"
           alt="Ciclista em alta performance"
+          width="1280"
+          height="640"
           loading="eager"
           decoding="sync"
           fetchpriority="high"
@@ -424,6 +422,29 @@
       class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"
     ></div>
 
+    <!-- Texto Legal e Rodapé -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <p class="text-center text-sm text-gray-500">
+        Este site é um protótipo interativo criado especialmente para você,
+        cliente, explorar e testar funcionalidades em tempo real. Caso você
+        queira um site semelhante, entre em contato conosco pelo WhatsApp:
+        <a
+          href="https://wa.me/5567998951171"
+          class="text-brand-blue hover:underline"
+          alt="WhatsApp"
+          target="_blank"
+          >(67) 99895-1171</a
+        >.
+      </p>
+    </section>
+    <footer
+      class="flex justify-center text-center text-sm text-gray-100 mt-8 bg-brand-blue py-4 px-4"
+    >
+      &copy;
+      <div id="ano"></div>
+      &nbsp;Bike Queen. Todos os direitos reservados. Desenvolvido por Suprema.
+    </footer>
+
     <script>
       // Inicializa os ícones do Lucide
       lucide.createIcons();
@@ -487,6 +508,8 @@
         badge.classList.add("hidden");
         document.getElementById("checkout-form").reset();
       }
+      // Ano atual
+      document.getElementById("ano").textContent = new Date().getFullYear();
     </script>
   </body>
 </html>
